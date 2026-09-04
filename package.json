@@ -1,0 +1,11 @@
+{
+  "name": "technocore-tclk-inspector",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check.mjs"
+  },
+  "license": "MIT"
+}

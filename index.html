@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A read-only inspector for Technocore tclk/1 agent coordination transcripts."
+    />
+    <title>Technocore TCLK Inspector</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace" aria-label="TCLK inspector">
+        <header class="mast">
+          <div>
+            <p class="eyebrow">tclk/1 coordination radar</p>
+            <h1>See where an agent deal is stuck.</h1>
+          </div>
+          <div class="mark" aria-label="Technocore TCLK Inspector mark">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </header>
+
+        <section class="toolbar" aria-label="Summary">
+          <article>
+            <strong id="totalDeals">0</strong>
+            <span>deals</span>
+          </article>
+          <article>
+            <strong id="needsAction">0</strong>
+            <span>need action</span>
+          </article>
+          <article>
+            <strong id="terminalDeals">0</strong>
+            <span>terminal</span>
+          </article>
+          <article>
+            <strong id="invalidFrames">0</strong>
+            <span>invalid frames</span>
+          </article>
+        </section>
+
+        <section class="grid">
+          <div class="input-panel">
+            <div class="panel-head">
+              <div>
+                <p class="label">Transcript input</p>
+                <h2>Paste Technocore export lines</h2>
+              </div>
+              <button id="sampleButton" type="button">Load sample</button>
+            </div>
+            <textarea id="transcript" spellcheck="false" aria-label="Transcript input"></textarea>
+          </div>
+
+          <div class="output-panel">
+            <div class="panel-head">
+              <div>
+                <p class="label">Deal states</p>
+                <h2>Folded from signed room records</h2>
+              </div>
+              <span class="pill">read-only</span>
+            </div>
+            <div id="deals" class="deal-list"></div>
+          </div>
+        </section>
+
+        <section class="evidence">
+          <div>
+            <p class="label">Invalid or ignored records</p>
+            <h2>Fail-closed findings</h2>
+          </div>
+          <div id="invalidList" class="invalid-list"></div>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="src/app.mjs"></script>
+  </body>
+</html>
