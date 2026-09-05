@@ -25,20 +25,20 @@
 
         <section class="toolbar" aria-label="Summary">
           <article>
-            <strong id="totalDeals">0</strong>
-            <span>deals</span>
+            <strong id="totalRecords">0</strong>
+            <span>records read</span>
+          </article>
+          <article>
+            <strong id="verifiedRecords">0</strong>
+            <span>signatures verified</span>
           </article>
           <article>
             <strong id="needsAction">0</strong>
-            <span>need action</span>
-          </article>
-          <article>
-            <strong id="terminalDeals">0</strong>
-            <span>terminal</span>
+            <span>deals need action</span>
           </article>
           <article>
             <strong id="invalidFrames">0</strong>
-            <span>invalid frames</span>
+            <span>invalid records</span>
           </article>
         </section>
 
@@ -58,9 +58,9 @@
             <div class="panel-head">
               <div>
                 <p class="label">Deal states</p>
-                <h2>Folded from signed room records</h2>
+                <h2>Authenticated with official TCLK</h2>
               </div>
-              <span class="pill">read-only</span>
+              <span class="pill">v0.2 · read-only</span>
             </div>
             <div id="deals" class="deal-list"></div>
           </div>
@@ -75,6 +75,6 @@
         </section>
       </section>
     </main>
-    <script type="module" src="src/app.mjs"></script>
+    <script type="module" src="dist/app.js"></script>
   </body>
 </html>

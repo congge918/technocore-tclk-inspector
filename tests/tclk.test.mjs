@@ -2,28 +2,40 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { inspectTranscript, sampleTranscript } from "../src/tclk.mjs";
 
-test("folds sample transcript into visible deal states", () => {
+test("folds the signed official-format fixture to claimed", () => {
   const result = inspectTranscript(sampleTranscript);
-  assert.equal(result.summary.totalDeals, 2);
+  assert.equal(result.summary.records, 5);
+  assert.equal(result.summary.verified, 5);
+  assert.equal(result.summary.invalid, 0);
   assert.equal(result.summary.terminal, 1);
-  assert.equal(result.summary.invalid, 2);
-  assert.equal(result.deals.find((deal) => deal.id === "offer-demo-001").status, "claimed");
+  assert.equal(result.deals[0].status, "claimed");
+  assert.equal(result.deals[0].settlement.code, "NO VALUE");
+  assert.deepEqual(result.deals[0].events.map((event) => event.ok), [true, true, true, true, true]);
 });
 
-test("rejects transport sender mismatch", () => {
-  const result = inspectTranscript(JSON.stringify({
-    room: "tclk-offers",
-    seq: 1,
-    ts: 1788351000000,
-    from: "did:key:z6Mkreal111111111111111111111111111111111111111111",
-    text: 'tclk1 {"amount":"1","asset":"FLOP","claimByMs":3,"expiresMs":1,"from":"did:key:z6Mkfake111111111111111111111111111111111111111111","id":"x","lock":"hash","nonce":"n","refundAfterMs":4,"role":"payer","rails":["paper"],"type":"offer"}',
-  }));
-  assert.equal(result.invalid[0].reason, "Frame from does not match signed record sender.");
+test("rejects a record after its signed message is changed", () => {
+  const rows = sampleTranscript.split("\n");
+  const offer = JSON.parse(rows[0]);
+  offer.text = offer.text.replace("2500000", "2500001");
+  rows[0] = JSON.stringify(offer);
+
+  const result = inspectTranscript(rows.join("\n"));
+  assert.equal(result.deals.length, 0);
+  assert.match(result.invalid[0].reason, /signature does not verify/);
 });
 
-test("late accept does not advance the deal", () => {
-  const result = inspectTranscript(sampleTranscript);
-  const deal = result.deals.find((item) => item.id === "offer-expired-002");
-  assert.equal(deal.status, "open");
-  assert.equal(deal.rejections[0].label, "Accept arrived after offer expiry");
+test("does not advance state from a detached raw frame", () => {
+  const rawFrame = JSON.parse(sampleTranscript.split("\n")[0]).text;
+  const result = inspectTranscript(rawFrame);
+  assert.equal(result.deals.length, 0);
+  assert.equal(result.summary.verified, 0);
+  assert.match(result.invalid[0].reason, /signed Technocore metadata is missing/);
+});
+
+test("preserves append order instead of moving an early accept behind its offer", () => {
+  const rows = sampleTranscript.split("\n");
+  [rows[0], rows[1]] = [rows[1], rows[0]];
+  const result = inspectTranscript(rows.join("\n"));
+  assert.equal(result.deals[0].status, "proposed");
+  assert.ok(result.invalid.some((finding) => /no matching preceding authenticated offer/.test(finding.reason)));
 });

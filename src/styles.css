@@ -254,6 +254,43 @@ textarea:focus {
   line-height: 1.5;
 }
 
+.verdict-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.verdict-strip span,
+.job {
+  padding: 6px 8px;
+  border: 1px solid rgba(245, 247, 250, 0.2);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.verdict-strip .pass { color: var(--green); }
+.verdict-strip .neutral { color: var(--muted); }
+.verdict-strip .warn { color: var(--danger); }
+
+.job {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--accent);
+}
+
+.settlement-note {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.step-fail strong {
+  color: var(--danger);
+}
+
 ol {
   margin: 18px 0 0;
   padding: 0;
